@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Edit ToDo Item</title>
+</head>
+<body>
+    <h1>Edit ToDo Item</h1>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">更新</button>
+        <!-- 新規追加ボタン -->
+        <input type="submit" name="add_new" value="新規追加">
+    </form>
+    <a href="{% url 'todo_list' %}">Back to the Future</a>
+</body>
+</html>
