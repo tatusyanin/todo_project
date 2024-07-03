@@ -4,19 +4,28 @@
     <meta charset="UTF-8">    
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PricePursuit</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
     <h1>PricePursuit</h1>
     <ul>
+        {% for todo in todos %}
+        <li class="todo-item{% if todo.completed %} completed{% endif %}">
+            {{ todo.text }}
+        </li>
+        {% endfor %}
+    </ul>
+    <ul>
         <!-- 価格でソートするボタンを追加 -->
         <form method="get" action="">
-            <button type="submit" name="sort_by_price">価格が安い順に並べ替え</button>
+            <button type="submit" name="sort_by_price">Sort by Value</button>
         </form>
     
         <!-- 最安値以外を削除するボタンを追加 -->
         <form method="post" action="{% url 'delete_cheapest_items' %}">
             {% csrf_token %}
-            <button type="submit">最安値以外の商品を削除</button>
+            <button type="submit">DealCleaner</button>
         </form>
         {% for todo_item in todo_items %}
             <li>
@@ -27,16 +36,16 @@
                 <a href="{% url 'edit_todo_item' todo_item.id %}">編集</a>
                 <a href="{% url 'delete_todo_item' todo_item.id %}">削除</a>
                 <a href="{% url 'toggle_completed_status' todo_item.id %}">
-                    {% if todo_item.completed %}未完了ボタンです。押してもいいけど二言あるのまじ草{% else %}完了{% endif %}
+                    {% if todo_item.completed %}未完了ボタン押してもいいけど二言あるのまじ草{% else %}完了{% endif %}
                 </a>
             </li>
         {% endfor %}
     </ul>
-    <a href="{% url 'create_todo_item' %}">新規追加</a>
+    <a href="{% url 'create_todo_item' %}">ado</a>
     {% if user.is_authenticated %}
-    <a href="{% url 'logout' %}">ログアウト</a>
+    <a href="{% url 'logout' %}">logout</a>
     {% else %}
-    <a href="{% url 'login' %}">ログイン</a>
+    <a href="{% url 'login' %}">login</a>
 {% endif %}
 
     
