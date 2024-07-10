@@ -1,6 +1,6 @@
 
 from django.shortcuts import render, redirect, get_object_or_404
-from .models import TodoItem
+from .models import TodoItem, Category
 from .forms import ToDoItemForm
 from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
@@ -27,15 +27,21 @@ def login_view(request):
 
 @login_required
 def todo_list(request):
-    if 'sort_by_price' in request.GET:
-        todo_items = TodoItem.objects.order_by('price')
-    else:
-        todo_items = TodoItem.objects.order_by('store_name')
+        categories = Category.objects.all()
+        todos = TodoItem.objects.all()
+        context = {
+        'categories': categories,
+        'todos': todos,
+    }
+        if 'sort_by_price' in request.GET:
+            todo_items = TodoItem.objects.order_by('price')
+        else:
+            todo_items = TodoItem.objects.order_by('store_name')
 
-    context = {
+        context = {
         'todo_items': todo_items
     }
-    return render(request, 'todo_list.html', context)
+        return render(request, 'todo_list.html', context)
 
 @login_required
 def create_todo_item(request):
