@@ -16,4 +16,6 @@ urlpatterns = [
     path('signup/', views.signup_view, name='signup'),  # 新規登録ページのURLを設定
     path('shopping/', views.shopping_todo, name='shopping_todo'),    # 買い物専用ページのパス設定
     path('calculate_total/', views.calculate_total, name='calculate_total'),
+    path('shopping/create/', views.create_todo_item, name='create_todo_item'),
+    path('shopping/add/', views.shopping_item_add, name='shopping_item_add'),
     ]

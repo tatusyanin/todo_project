@@ -27,8 +27,15 @@ class TodoItem(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
     is_shopping = models.BooleanField(default=False)  # 新しいフィールドを追加
-
+    source = models.CharField(max_length=50, default='default')  # 'default' or 'shopping'
     def __str__(self):
         return self.title
     def __str__(self):
         return self.description
+    
+class ShoppingItem(models.Model):
+    item_name = models.CharField(max_length=100)
+    prices = models.DecimalField(max_digits=10, decimal_places=2)  # 価格フィールドを追加
+
+    def __str__(self):
+        return self.name

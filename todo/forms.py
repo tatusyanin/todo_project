@@ -1,6 +1,6 @@
 from django import forms
 from .models import TodoItem, Category
-
+from .models import ShoppingItem
 
 class ToDoItemForm(forms.ModelForm):
     due_date = forms.DateField(
@@ -24,4 +24,8 @@ class ToDoItemForm(forms.ModelForm):
     class Meta:
         model = TodoItem
         fields = ['description', 'due_date', 'priority', 'price','store_name', 'category','is_shopping']
-        
+
+class ShoppingItemForm(forms.ModelForm):
+    class Meta:
+        model = ShoppingItem
+        fields = ['item_name','prices']  # 必要に応じてフィールドを追加        

@@ -1,0 +1,10 @@
+<!-- shopping_item_add.html -->
+<h2>買い物アイテムを追加</h2>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">追加する</button>
+    <!-- shopping_todo_list.html もしくは他の適切な場所 -->
+<a href="{% url 'shopping_item_add' %}">買い物アイテムを追加する</a>
+
+</form>

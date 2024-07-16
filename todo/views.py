@@ -51,14 +51,16 @@ def create_todo_item(request):
     if request.method == 'POST':
         form = ToDoItemForm(request.POST)
         if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('todo_list'))  # ToDo リストにリダイレクト
-        else:
-            print(form.errors)
+            todo_item = form.save(commit=False)
+            todo_item.source = request.POST.get('source', 'default')
+            todo_item.save()
+            if todo_item.source == 'shopping':
+                return redirect('shopping_todo')
+            return redirect('todo_list')
     else:
         form = ToDoItemForm()
-    logger.info("Rendering create_todo_item.html")
-    return render(request, 'todo/create_todo_item.html', {'form': form})
+    categories = Category.objects.all()
+    return render(request, 'todo/create_todo_item.html', {'form': form, 'categories': categories})
 
 @login_required
 def mark_as_completed(request, todo_id):
@@ -165,13 +167,23 @@ def signup_view(request):
     return render(request, 'registration/signup.html', {'form': form})
 
 def shopping_todo(request):
-    shopping_todos = TodoItem.objects.filter(category__name='買い物')
-    total_price = sum(item.price for item in shopping_todos)
-    context = {
-        'shopping_items': shopping_todo,
-        'total_price': total_price
-    }    
-    return render(request, 'todo/shopping_todo.html', context)
+    todo_items = TodoItem.objects.filter(source='shopping')
+    return render(request, 'todo/shopping_todo.html', {'todo_items': todo_items})
+
+from .forms import ShoppingItemForm
+def shopping_item_add(request):
+    if request.method == 'POST':
+        form = ShoppingItemForm(request.POST)
+        if form.is_valid():
+            # フォームが有効な場合、処理を追加
+            # 例えば、データベースに保存したり、他の処理を行ったりします
+            form.save()
+            return redirect('add_shopping_item')  # 成功後に同じページにリダイレクトする例
+    else:
+        form = ShoppingItemForm()
+    
+    return render(request, 'shopping_todo/add_shopping_item.html', {'form': form})
+
 
 
 
