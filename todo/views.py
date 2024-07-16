@@ -6,6 +6,8 @@ from django.contrib.auth import logout, login, authenticate
 from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from .models import TodoItem
+from django.shortcuts import render
 
 import logging
 
@@ -29,6 +31,7 @@ def login_view(request):
 def todo_list(request):
         categories = Category.objects.all()
         todos = TodoItem.objects.all()
+        total_price = sum(todo.price for todo in todos)
         context = {
         'categories': categories,
         'todos': todos,
@@ -103,7 +106,15 @@ def edit_todo_item(request, todo_id):
         form = ToDoItemForm(instance=todo_item)
     return render(request, 'todo/edit_todo_item.html', {'form': form})
 
+
 def newly_added_item_detail(request, todo_id):
+    if request.method == 'POST':
+        form = ToDoItemForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('shopping_todo_list')
+    else:
+        form = ToDoItemForm()
     todo_item = get_object_or_404(TodoItem, pk=todo_id)
     return render(request, 'todo/newly_added_item_detail.html', {'todo_item': todo_item})
 
@@ -152,3 +163,27 @@ def signup_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
+
+def shopping_todo(request):
+    shopping_todos = TodoItem.objects.filter(category__name='買い物')
+    total_price = sum(item.price for item in shopping_todos)
+    context = {
+        'shopping_items': shopping_todo,
+        'total_price': total_price
+    }    
+    return render(request, 'todo/shopping_todo.html', context)
+
+
+
+from django.shortcuts import redirect
+
+def calculate_total(request):
+    if request.method == 'POST':
+        todos = TodoItem.objects.all()
+        total_price = sum(todo.price for todo in todos)
+        context = {
+            'todos': todos,
+            'total_price': total_price,
+        }
+        return render(request, 'todo_list.html', context)
+    return redirect('todo_list')  # Todoリストページにリダイレクト

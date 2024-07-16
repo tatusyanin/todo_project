@@ -23,4 +23,5 @@ class ToDoItemForm(forms.ModelForm):
     )
     class Meta:
         model = TodoItem
-        fields = ['description', 'due_date', 'priority', 'price','store_name', 'category']
+        fields = ['description', 'due_date', 'priority', 'price','store_name', 'category','is_shopping']
+        

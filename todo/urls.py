@@ -14,4 +14,6 @@ urlpatterns = [
     path('home/', views.home, name='home'),  # 'home'ビュー
     path('logout-page/', views.logout_page, name='logout_page'),  # ログアウト後のページ用ビュー
     path('signup/', views.signup_view, name='signup'),  # 新規登録ページのURLを設定
+    path('shopping/', views.shopping_todo, name='shopping_todo'),    # 買い物専用ページのパス設定
+    path('calculate_total/', views.calculate_total, name='calculate_total'),
     ]

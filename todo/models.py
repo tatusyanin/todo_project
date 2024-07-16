@@ -26,6 +26,7 @@ class TodoItem(models.Model):
     store_name = models.CharField(max_length=100, default="")  # 新しい store_name フィールドを追加
     category = models.ForeignKey(Category, on_delete=models.CASCADE)
     completed = models.BooleanField(default=False)
+    is_shopping = models.BooleanField(default=False)  # 新しいフィールドを追加
 
     def __str__(self):
         return self.title

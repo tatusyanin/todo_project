@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>買い物ToDoリスト</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+</head>
+<body>
+    <h1>買い物ToDoリスト</h1>
+    <ul>
+        {% for item in shopping_items %}
+            <li>{{ item.task }} - ¥{{ item.price }}</li>
+        {% endfor %}
+    </ul>
+    <p>合計金額: ¥{{ total_price }}</p>
+    <a href="{% url 'create_todo_item' %}">新しい商品を追加</a>
+    <a href="{% url 'todo_list' %}">戻る</a>
+</body>
+</html>
