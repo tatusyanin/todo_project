@@ -8,6 +8,8 @@ from django.http import HttpResponseRedirect
 from django.urls import reverse
 from .models import TodoItem
 from django.shortcuts import render
+from .forms import ShoppingItemForm
+from .models import ShoppingItem, Category
 
 import logging
 
@@ -165,27 +167,34 @@ def signup_view(request):
     else:
         form = UserCreationForm()
     return render(request, 'registration/signup.html', {'form': form})
+from .models import ShoppingItem
 
-def shopping_todo(request):
-    todo_items = TodoItem.objects.filter(source='shopping')
-    return render(request, 'todo/shopping_todo.html', {'todo_items': todo_items})
-
-from .forms import ShoppingItemForm
 def shopping_item_add(request):
     if request.method == 'POST':
         form = ShoppingItemForm(request.POST)
         if form.is_valid():
-            # フォームが有効な場合、処理を追加
-            # 例えば、データベースに保存したり、他の処理を行ったりします
             form.save()
-            return redirect('add_shopping_item')  # 成功後に同じページにリダイレクトする例
+            return redirect('shopping_todo')  # リダイレクト先のURLネームを確認
     else:
         form = ShoppingItemForm()
-    
-    return render(request, 'shopping_todo/add_shopping_item.html', {'form': form})
+    return render(request, 'shopping_item_add.html', {'form': form})
 
+def shopping_todo(request):
+    items = ShoppingItem.objects.all()
+    total_price = sum(item.prices * item.quantity for item in items if item.display_on_list)
+    return render(request, 'shopping_todo.html', {'items': items, 'total_price': total_price})
 
+def delete_shopping_item(request, item_id):
+    item = get_object_or_404(ShoppingItem, id=item_id)
+    if request.method == 'POST':
+        item.delete()
+        return redirect('shopping_todo')
+    return redirect('shopping_todo')
 
+def calculate_total_price(request):
+    items = ShoppingItem.objects.all()
+    total_price = sum(item.prices for item in items)
+    return render(request, 'shopping_todo.html', {'items': items, 'total_price': total_price})
 
 from django.shortcuts import redirect
 

@@ -35,7 +35,11 @@ class TodoItem(models.Model):
     
 class ShoppingItem(models.Model):
     item_name = models.CharField(max_length=100)
-    prices = models.DecimalField(max_digits=10, decimal_places=2)  # 価格フィールドを追加
+    prices = models.DecimalField(max_digits=10, decimal_places=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
+    display_on_list = models.BooleanField(default=True)
+    quantity = models.PositiveIntegerField(default=1)  # 追加: 個数フィールド
 
     def __str__(self):
-        return self.name
+        return self.item_name
+

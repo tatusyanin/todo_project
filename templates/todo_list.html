@@ -62,12 +62,12 @@
         {% endfor %}
     </ul>
     
-    <p>合計金額: ¥{{ total_price }}</p>
+    <p>合計金額: ¥{{ total_price }}円</p>
     <form method="post" action="{% url 'calculate_total' %}">
         {% csrf_token %}
         <button type="submit">合計を計算</button>
     </form>
-    
+
     <a href="{% url 'create_todo_item' %}">ado</a>
     <a href="{% url 'shopping_todo' %}">買い物ToDo</a>
     {% if user.is_authenticated %}

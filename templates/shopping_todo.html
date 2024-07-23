@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Todo - リスト</title>
+</head>
+<body>
+    <h1>ショッピングリスト</h1>
+    <ul>
+        {% for item in items %}
+        <li>
+            {{ item.item_name }} - {{ item.category.name }} - {{ item.quantity }}個 - ¥{{ item.prices }}
+            <form method="post" action="{% url 'delete_shopping_item' item.id %}" style="display:inline;">
+                {% csrf_token %}
+                <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+            </form>
+        </li>
+        {% endfor %}
+    </ul>
+    
+    <h2>合計: {{ total_price }} 円</h2>
+    <form method="post" action="{% url 'calculate_total_price' %}">
+        {% csrf_token %}
+        <button type="submit">合計を計算</button>
+    </form>
+    <a href="{% url 'shopping_item_add' %}">商品追加</a>
+    <a href="{% url 'todo_list' %}">最初のページの戻る</a>
+
+</body>
+</html>

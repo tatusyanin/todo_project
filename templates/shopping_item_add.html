@@ -1,0 +1,19 @@
+<!-- shopping_item_add.html -->
+
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>Shopping Todo - 商品追加</title>
+</head>
+<body>
+    <h1>商品追加</h1>
+    <form method="post" action="{% url 'shopping_item_add' %}">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">追加</button>
+    </form>
+    <a href="{% url 'shopping_todo' %}">ショッピングリストへ戻る</a>
+    <!-- 商品の一覧を表示するセクション -->
+</body>
+</html>
