@@ -34,7 +34,7 @@ def login_view(request):
 def todo_list(request):
         categories = Category.objects.all()
         todos = TodoItem.objects.all()
-        total_price = sum(todo.price for todo in todos)
+        total_price = sum(todo.price or 0 for todo in todos)
         context = {
         'categories': categories,
         'todos': todos,
