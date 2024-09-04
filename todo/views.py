@@ -10,6 +10,7 @@ from .models import TodoItem
 from django.shortcuts import render
 from .forms import ShoppingItemForm
 from .models import ShoppingItem, Category
+from .models import TodoItem, Store
 
 import logging
 
@@ -41,7 +42,7 @@ def todo_list(request):
         if 'sort_by_price' in request.GET:
             todo_items = TodoItem.objects.order_by('price')
         else:
-            todo_items = TodoItem.objects.order_by('store_name')
+            todo_items = TodoItem.objects.order_by('store_id')
 
         context = {
         'todo_items': todo_items
@@ -62,6 +63,10 @@ def create_todo_item(request):
     else:
         form = ToDoItemForm()
     categories = Category.objects.all()
+    context = {
+        'form': form,
+        'stores': Store.objects.all()
+    }
     return render(request, 'todo/create_todo_item.html', {'form': form, 'categories': categories})
 
 @login_required

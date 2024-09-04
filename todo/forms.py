@@ -1,7 +1,9 @@
 from django import forms
 from .models import TodoItem, Category
+from .models import TodoItem, Store
 from .models import ShoppingItem
 from .models import ShoppingItem, Category
+from .models import ShoppingItem,Store
 
 class ToDoItemForm(forms.ModelForm):
     due_date = forms.DateField(
@@ -22,9 +24,15 @@ class ToDoItemForm(forms.ModelForm):
         empty_label="選択してください",
         to_field_name='name'
     )
+    store = forms.ModelChoiceField(
+        queryset=Store.objects.all(),
+        empty_label="選択してください",
+    )
+
     class Meta:
         model = TodoItem
-        fields = ['description', 'due_date', 'priority', 'price','store_name', 'category','is_shopping']
+        fields = ['description', 'due_date', 'priority', 'price', 'category', 'store', 'is_shopping']
+
 
 class ShoppingItemForm(forms.ModelForm):
     class Meta:
