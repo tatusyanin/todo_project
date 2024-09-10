@@ -18,3 +18,10 @@ h1 {
 .completed {
     text-decoration: line-through;
 }
+
+
+/* @media  and (min-width:920px) {
+    h1 {
+
+    }
+} */

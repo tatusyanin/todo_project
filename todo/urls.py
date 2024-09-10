@@ -14,12 +14,12 @@ urlpatterns = [
     path('delete-cheapest-items/', views.delete_cheapest_items, name='delete_cheapest_items'),
     path('newly-added/<int:todo_id>/', views.newly_added_item_detail, name='newly_added_item_detail'),
     path('home/', views.home, name='home'),  # 'home'ビュー
-    path('logout-page/', views.logout_page, name='logout_page'),  # ログアウト後のページ用ビュー
+    path('logout-page/', views.logout_page, name='logout_page'),  # ログアウト後のページ用
     path('signup/', views.signup_view, name='signup'),  # 新規登録ページのURLを設定
     path('shopping/', views.shopping_todo, name='shopping_todo'),    # 買い物専用ページのパス設定
-    path('calculate_total/', views.calculate_total, name='calculate_total'),
-    path('shopping/create/', views.create_todo_item, name='shopping_item_todo1'),
-    path('shopping/add/', views.shopping_item_add, name='shopping_item_add'),
+    path('calculate_total/', views.calculate_total, name='calculate_total'),#合計額を計算
+    path('shopping/create/', views.create_todo_item, name='shopping_item_todo1'),#作成
+    path('shopping/add/', views.shopping_item_add, name='shopping_item_add'),#追加
     path('item/delete/<int:item_id>/', views.delete_shopping_item, name='delete_shopping_item'),
     path('shopping/calculate_total_price/', calculate_total_price, name='calculate_total_price'),
     ]

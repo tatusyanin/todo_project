@@ -39,7 +39,7 @@ def todo_list(request):
         'categories': categories,
         'todos': todos,
     }
-        if 'sort_by_price' in request.GET:
+        if 'sort_by_price' in request.GET:#安い順に並べ替える
             todo_items = TodoItem.objects.order_by('price')
         else:
             todo_items = TodoItem.objects.order_by('store_id')
@@ -70,7 +70,7 @@ def create_todo_item(request):
     return render(request, 'todo/create_todo_item.html', {'form': form, 'categories': categories})
 
 @login_required
-def mark_as_completed(request, todo_id):
+def mark_as_completed(request, todo_id):#完了ボタン
     todo_item = get_object_or_404(TodoItem, pk=todo_id)
     todo_item.completed = True
     todo_item.save()
@@ -98,7 +98,7 @@ def delete_todo_item(request, todo_id):
     return redirect('todo_list')
 
 @login_required
-def edit_todo_item(request, todo_id):
+def edit_todo_item(request, todo_id):#編集
     todo_item = get_object_or_404(TodoItem, pk=todo_id)
     if request.method == 'POST':
         form = ToDoItemForm(request.POST, instance=todo_item)
@@ -128,7 +128,7 @@ def newly_added_item_detail(request, todo_id):
     return render(request, 'todo/newly_added_item_detail.html', {'todo_item': todo_item})
 
 @login_required
-def delete_cheapest_items(request):
+def delete_cheapest_items(request):#最安値を表示後削除
     items = TodoItem.objects.all()
     grouped_items = {}
     
@@ -163,7 +163,7 @@ def logout_page(request):
 from django.shortcuts import render, redirect
 from django.contrib.auth.forms import UserCreationForm
 
-def signup_view(request):
+def signup_view(request):#サインアップ
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -174,7 +174,7 @@ def signup_view(request):
     return render(request, 'registration/signup.html', {'form': form})
 from .models import ShoppingItem
 
-def shopping_item_add(request):
+def shopping_item_add(request):#買い物用
     if request.method == 'POST':
         form = ShoppingItemForm(request.POST)
         if form.is_valid():
@@ -189,21 +189,21 @@ def shopping_todo(request):
     total_price = sum(item.prices * item.quantity for item in items if item.display_on_list)
     return render(request, 'shopping_todo.html', {'items': items, 'total_price': total_price})
 
-def delete_shopping_item(request, item_id):
+def delete_shopping_item(request, item_id):#削除
     item = get_object_or_404(ShoppingItem, id=item_id)
     if request.method == 'POST':
         item.delete()
         return redirect('shopping_todo')
     return redirect('shopping_todo')
 
-def calculate_total_price(request):
+def calculate_total_price(request):#計算
     items = ShoppingItem.objects.all()
     total_price = sum(item.prices for item in items)
     return render(request, 'shopping_todo.html', {'items': items, 'total_price': total_price})
 
 from django.shortcuts import redirect
 
-def calculate_total(request):
+def calculate_total(request):#合計額計算
     if request.method == 'POST':
         todos = TodoItem.objects.all()
         total_price = sum(todo.price for todo in todos)

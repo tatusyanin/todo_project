@@ -3,16 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <title>Shopping Todo - リスト</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
 </head>
 <body>
-    <h1>ショッピングリスト</h1>
+    <h1>PricePursuit</h1>
     <ul>
         {% for item in items %}
         <li>
             {{ item.item_name }} - {{ item.category.name }} - {{ item.quantity }}個 - ¥{{ item.prices }}
             <form method="post" action="{% url 'delete_shopping_item' item.id %}" style="display:inline;">
                 {% csrf_token %}
-                <button type="submit" onclick="return confirm('本当に削除しますか？');">削除</button>
+                <button type="submit" onclick="return confirm('まじで削除しますか？');">削除</button>
             </form>
         </li>
         {% endfor %}

@@ -3,7 +3,7 @@ from django.db import models
 # Create your models here.
 # todo/models.py
 
-class Category(models.Model):
+class Category(models.Model):#カテゴリ選択
     name = models.CharField(max_length=255)
 
     def __str__(self):
@@ -13,7 +13,7 @@ class Category(models.Model):
     def default_category():
         return Category.objects.get_or_create(name='Default Category')[0]
 
-class Store(models.Model):
+class Store(models.Model):#店舗選択
     name = models.CharField(max_length=100)
 
     def __str__(self):
@@ -42,7 +42,7 @@ class ShoppingItem(models.Model):
     prices = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.ForeignKey(Category, on_delete=models.CASCADE, default=1)
     display_on_list = models.BooleanField(default=True)
-    quantity = models.PositiveIntegerField(default=1)  # 追加: 個数フィールド
+    quantity = models.PositiveIntegerField(default=1)  # 個数フィールド　複数購入時
 
     def __str__(self):
         return self.item_name
