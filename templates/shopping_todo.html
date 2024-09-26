@@ -1,13 +1,15 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Shopping Todo - リスト</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles_shopping.css' %}">
 </head>
 <body>
     <h1>PricePursuit</h1>
+    <div class="shopping">
     <ul>
         {% for item in items %}
         <li>
@@ -19,7 +21,8 @@
         </li>
         {% endfor %}
     </ul>
-    
+    </div>
+    <div class="price">
     <h2>合計: {{ total_price }} 円</h2>
     <form method="post" action="{% url 'calculate_total_price' %}">
         {% csrf_token %}
@@ -27,6 +30,6 @@
     </form>
     <a href="{% url 'shopping_item_add' %}">商品追加</a>
     <a href="{% url 'todo_list' %}">最初のページに戻る</a>
-
+    </div>
 </body>
 </html>

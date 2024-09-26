@@ -3,12 +3,14 @@
 <!DOCTYPE html>
 <html lang="ja">
 <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta charset="UTF-8">
     <title>Shopping Todo - 商品追加</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <link rel="stylesheet" href="{% static 'css/styles_shopping.css' %}">
 </head>
 <body>
+    <div class="ado">
     <h1>商品追加</h1>
     <form method="post" action="{% url 'shopping_item_add' %}">
         {% csrf_token %}
@@ -17,5 +19,6 @@
     </form>
     <a href="{% url 'shopping_todo' %}">ショッピングリストへ戻る</a>
     <!-- 商品の一覧を表示するセクション -->
+    </div>
 </body>
 </html>

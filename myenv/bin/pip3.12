@@ -1,4 +1,4 @@
-#!/Users/jo-jaku/Desktop/2年次/python演習/todo_project/myenv/bin/python3.12
+#!/Users/jo-jaku/Desktop/2年次/python演習/todo_project/myenv/bin/python
 # -*- coding: utf-8 -*-
 import re
 import sys

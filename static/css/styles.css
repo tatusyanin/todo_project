@@ -1,9 +1,53 @@
 /* static/css/styles.css */
+/* 基本スタイル */
 body {
-    background-color: #c0b7b7 !important;
-    font-family: Arial, sans-serif !important;
+    font-family: Arial, sans-serif;
+    margin-left: 500px;
+    padding: 20px;
+    background-color: aqua;
 }
 
-h1 {
-    color: #000000 !important;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* iPhone 14 用のスタイル */
+@media only screen and (max-width: 390px) and (max-height: 844px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .todo-item {
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        width: 100%; /* ボタンを幅いっぱいにする */
+        padding: 15px;
+        font-size: 16px;
+    }
 }
+

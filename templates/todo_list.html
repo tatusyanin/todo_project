@@ -2,7 +2,6 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">    
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PricePursuit</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
@@ -50,7 +49,7 @@
                 <a href="{% url 'edit_todo_item' todo_item.id %}">編集</a>
                 <a href="{% url 'delete_todo_item' todo_item.id %}">削除</a>
                 <a href="{% url 'toggle_completed_status' todo_item.id %}">
-                    {% if todo_item.completed %}未完了ボタン押してもいいけど二言あるのまじ草{% else %}完了{% endif %}
+                    {% if todo_item.completed %}未完了{% else %}完了{% endif %}
                 </a>
             </li>
         {% endfor %}

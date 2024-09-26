@@ -1,0 +1,38 @@
+/* 基本スタイル */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    padding: 20px;
+    background-color: aqua;
+}
+
+h1 {
+    margin-left: 500px;
+}
+
+.shopping {
+    margin-left: 452px;
+}
+
+.price {
+    margin-left: 500px;
+}
+
+.ado { 
+    margin-left: 500px;
+}
+
+.ado h1 {
+    margin-left: 70px;
+}
+
+.ado button {
+    margin-left: 100px;
+}
+
+/* iPhone 14 用のスタイル */
+@media only screen and (max-width: 390px) and (max-height: 844px) {
+    body {
+        margin: 21.44px 0px 21.44px 50px;
+    }
+}
