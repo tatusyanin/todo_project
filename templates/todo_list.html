@@ -5,74 +5,105 @@
     <title>PricePursuit</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        body {
+            transition: background-color 1s ease; /* 背景色が変わるアニメーション */
+        }
+    </style>
 </head>
 <body>
-    <h1>PricePursuit</h1>
-    <h2>{{ category.name }}</h2>
-    <ul>
-        {% for todo_item in todo_items %}
-            {% if todo_item.category == category %}
-                <li>
-                    {{ todo_item.description }} <!-- タイトルの代わりに Description を表示 -->
-                    {% if todo_item.completed %}(完了){% endif %}
-                    <span>(カテゴリ: {{ todo_item.category.name }})</span>
-                    <span>(価格: {{ todo_item.price|floatformat:"0" }})</span>
-                    <span>(店舗名: {{ todo_item.store_name }})</span>
-                    <a href="{% url 'edit_todo_item' todo_item.id %}">編集</a>
-                    <a href="{% url 'delete_todo_item' todo_item.id %}">削除</a>
-                    <a href="{% url 'toggle_completed_status' todo_item.id %}">
-                        {% if todo_item.completed %}未完了{% else %}完了{% endif %}
-                    </a>
-                </li>
+    <!-- ナビゲーションバー -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">PricePursuit</a>
+        <div class="ml-auto">
+            {% if user.is_authenticated %}
+                <a href="{% url 'logout' %}" class="btn btn-outline-secondary">Logout</a>
+            {% else %}
+                <a href="{% url 'login' %}" class="btn btn-outline-primary">Login</a>
             {% endif %}
-        {% endfor %}
-    </ul>
-    <ul>
-        <!-- 価格でソートするボタンを追加 -->
-        <form method="get" action="">
-            <button type="submit" name="sort_by_price">Sort by Value</button>
-        </form>
-    
-        <!-- 最安値以外を削除するボタンを追加 -->
-        <form method="post" action="{% url 'delete_cheapest_items' %}">
-            {% csrf_token %}
-            <button type="submit">DealCleaner</button>
-        </form>
-        
-        {% for todo_item in todo_items %}
-            <li>
-                {{ todo_item.description }} <!-- タイトルの代わりに Description を表示 -->
-                {% if todo_item.completed %}(完了){% endif %}
-                <span>(カテゴリ: {{ todo_item.category.name }})</span>
-                <span>(価格: {{ todo_item.price|floatformat:"0" }})</span>
-                <span>(店舗名: {{ todo_item.store }})</span>
-                <a href="{% url 'edit_todo_item' todo_item.id %}">編集</a>
-                <a href="{% url 'delete_todo_item' todo_item.id %}">削除</a>
-                <a href="{% url 'toggle_completed_status' todo_item.id %}">
-                    {% if todo_item.completed %}未完了{% else %}完了{% endif %}
-                </a>
-            </li>
-        {% endfor %}
-    </ul>
+        </div>
+    </nav>
 
-    <ul>
-        {% for todo in todos %}
-        <li>{{ todo.task }} - ¥{{ todo.price }}</li>
-        {% endfor %}
-    </ul>
-    
-    <p1>合計金額: ¥{{ total_price }}円</p1>
-    <form method="post" action="{% url 'calculate_total' %}">
-        {% csrf_token %}
-        <button type="submit">合計を計算</button>
-    </form>
+    <div class="container mt-4">
+        <h1 class="text-center">PricePursuit</h1>
+        <h2 class="text-center">{{ category.name }}</h2>
 
-    <a href="{% url 'create_todo_item' %}">add</a>
-    <a href="{% url 'shopping_todo' %}">買い物ToDo</a>
-    {% if user.is_authenticated %}
-        <a href="{% url 'logout' %}">logout</a>
-    {% else %}
-        <a href="{% url 'login' %}">login</a>
-    {% endif %}
+        <!-- Todoリスト -->
+        <ul class="list-group mb-4">
+            {% for todo_item in todo_items %}
+                {% if todo_item.category == category %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        <span>
+                            {{ todo_item.description }} 
+                            {% if todo_item.completed %}<span class="badge badge-success ml-2">完了</span>{% endif %}
+                        </span>
+                        <div>
+                            <span class="badge badge-info">カテゴリ: {{ todo_item.category.name }}</span>
+                            <span class="badge badge-warning">価格: ¥{{ todo_item.price|floatformat:"0" }}</span>
+                            <span class="badge badge-secondary">店舗名: {{ todo_item.store_name }}</span>
+                            <a href="{% url 'edit_todo_item' todo_item.id %}" class="btn btn-sm btn-outline-info ml-2">編集</a>
+                            <a href="{% url 'delete_todo_item' todo_item.id %}" class="btn btn-sm btn-outline-danger ml-2">削除</a>
+                            <a href="{% url 'toggle_completed_status' todo_item.id %}" class="btn btn-sm btn-outline-success ml-2">
+                                {% if todo_item.completed %}未完了{% else %}完了{% endif %}
+                            </a>
+                        </div>
+                    </li>
+                {% endif %}
+            {% endfor %}
+        </ul>
+
+        <!-- 価格ソート & 最安値削除ボタン -->
+        <div class="d-flex justify-content-between mb-4">
+            <form method="get" action="">
+                <button type="submit" name="sort_by_price" class="btn btn-primary">Sort by Value</button>
+            </form>
+            <form method="post" action="{% url 'delete_cheapest_items' %}">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">DealCleaner</button>
+            </form>
+        </div>
+
+        <!-- 合計金額表示 -->
+        <div class="card mb-4">
+            <div class="card-body">
+                <h5 class="card-title">合計金額: ¥{{ total_price }}円</h5>
+                <form method="post" action="{% url 'calculate_total' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-success">合計を計算</button>
+                </form>
+            </div>
+        </div>
+
+        <!-- ショッピング & 新規追加リンク -->
+        <div class="d-flex justify-content-between">
+            <a href="{% url 'create_todo_item' %}" class="btn btn-outline-primary">ado</a>
+            <a href="{% url 'shopping_todo' %}" class="btn btn-outline-secondary">買い物ToDo</a>
+        </div>
+    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    
+    <!-- ランダムな背景色を設定するJavaScript -->
+    <script>
+        // ランダムな色を生成する関数
+        function getRandomColor() {
+            const letters = '0123456789ABCDEF';
+            let color = '#';
+            for (let i = 0; i < 6; i++) {
+                color += letters[Math.floor(Math.random() * 16)];
+            }
+            return color;
+        }
+
+        // ページが読み込まれた時に背景色を変更
+        window.onload = function() {
+            document.body.style.backgroundColor = getRandomColor();
+        }
+    </script>
 </body>
 </html>
