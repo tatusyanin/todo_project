@@ -32,22 +32,31 @@ def login_view(request):
 
 @login_required
 def todo_list(request):
-        categories = Category.objects.all()
-        todos = TodoItem.objects.all()
-        total_price = sum(todo.price or 0 for todo in todos) #値段の入力を任意
-        context = {
-        'categories': categories,
-        'todos': todos,
-    }
-        if 'sort_by_price' in request.GET:#安い順に並べ替える
-            todo_items = TodoItem.objects.order_by('price')
-        else:
-            todo_items = TodoItem.objects.order_by('store_id')
+    categories = Category.objects.all()
+    todo_items = TodoItem.objects.all()  # 商品情報を全て取得
+    total_price = sum(todo.price or 0 for todo in todo_items)  # 値段の合計を計算
+    selected_category = request.GET.get('category')  # URLパラメータでカテゴリを取得
+    if selected_category:
+        # カテゴリが選択されている場合、そのカテゴリの TodoItem をフィルタリング
+        todo_items = TodoItem.objects.filter(category__name=selected_category)
+    else:
+        # カテゴリが選択されていない場合は全ての TodoItem を表示
+        todo_items = TodoItem.objects.all()
 
-        context = {
-        'todo_items': todo_items
+    # ソート処理
+    if 'sort_by_price' in request.GET:
+        todo_items = todo_items.order_by('price')
+    else:
+        todo_items = todo_items.order_by('store__name')
+
+    context = {
+        'categories': categories,
+        'todo_items': todo_items,  # 商品情報
+        'total_price': total_price,  # 合計金額
     }
-        return render(request, 'todo_list.html', context)
+
+    return render(request, 'todo_list.html', context)
+
 
 @login_required
 def create_todo_item(request):
@@ -134,12 +143,12 @@ def delete_cheapest_items(request):#最安値を表示後削除
     
     # 商品名ごとにアイテムをグループ化
     for item in items:
-        if item.description not in grouped_items:
+        if item.title not in grouped_items:
             grouped_items[item.description] = []
-        grouped_items[item.description].append(item)
+        grouped_items[item.title].append(item)
     
     # 最安値以外のアイテムを削除
-    for description, items in grouped_items.items():
+    for title, items in grouped_items.items():
         items.sort(key=lambda x: x.price)  # 価格でソート
         for item in items[1:]:  # 最安値のアイテムを除く
             item.delete()
