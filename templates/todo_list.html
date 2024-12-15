@@ -32,20 +32,29 @@
 
         <!-- Todoリスト -->
         <ul class="list-group mb-4">
-            {% for todo_item in todo_items %}
+            {% for todo in todo_items %}
                 {% if todo_item.category == category %}
+                <!-- <li>{{ todo.title }} - {{ todo.category.name }} - ¥{{ todo.price|floatformat:0 }} - {{ todo.store }} {% if todo.completed %}(完了){% else %}(未完了){% endif %}</li> -->
                     <li class="list-group-item d-flex justify-content-between align-items-center">
                         <span>
-                            {{ todo_item.description }} 
+                            {{ todo_item.title }} 
                             {% if todo_item.completed %}<span class="badge badge-success ml-2">完了</span>{% endif %}
                         </span>
                         <div>
-                            <span class="badge badge-info">カテゴリ: {{ todo_item.category.name }}</span>
-                            <span class="badge badge-warning">価格: ¥{{ todo_item.price|floatformat:"0" }}</span>
-                            <span class="badge badge-secondary">店舗名: {{ todo_item.store_name }}</span>
-                            <a href="{% url 'edit_todo_item' todo_item.id %}" class="btn btn-sm btn-outline-info ml-2">編集</a>
-                            <a href="{% url 'delete_todo_item' todo_item.id %}" class="btn btn-sm btn-outline-danger ml-2">削除</a>
-                            <a href="{% url 'toggle_completed_status' todo_item.id %}" class="btn btn-sm btn-outline-success ml-2">
+                            <span class="badge badge-info">カテゴリ: {{ todo.category.name }}</span>
+
+                            <span class="badge badge-warning">価格: ¥{{ todo.price|floatformat:"0" }}</span>
+
+                            <span class="badge badge-warning">商品名: ¥{{ todo.title }}</span>
+
+                            <span class="badge badge-secondary">店舗名: {{ todo.store }}</span>
+
+
+                            <a href="{% url 'edit_todo_item' todo.id %}" class="btn btn-sm btn-outline-info ml-2">編集</a>
+
+                            <a href="{% url 'delete_todo_item' todo.id %}" class="btn btn-sm btn-outline-danger ml-2">削除</a>
+
+                            <a href="{% url 'toggle_completed_status' todo.id %}" class="btn btn-sm btn-outline-success ml-2">
                                 {% if todo_item.completed %}未完了{% else %}完了{% endif %}
                             </a>
                         </div>
