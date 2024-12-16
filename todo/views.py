@@ -34,13 +34,9 @@ def login_view(request):
 def todo_list(request):
     categories = Category.objects.all()
     todo_items = TodoItem.objects.all()  # 商品情報を全て取得
-<<<<<<< HEAD
-    total_price = sum(todo.price or 0 for todo in todo_items)  # 値段の合計を計算
-=======
     # total_price = sum(todo.price or 0 for todo in todo_items)  # 値段の合計を計算
     # 合計金額を計算（price × quantity）
     total_price = sum(item.price * item.quantity for item in todo_items)
->>>>>>> 5997d3b0563800d02fcd9968bfac73505bed96ac
     selected_category = request.GET.get('category')  # URLパラメータでカテゴリを取得
     if selected_category:
         # カテゴリが選択されている場合、そのカテゴリの TodoItem をフィルタリング
