@@ -6,30 +6,62 @@
     <title>Shopping Todo - リスト</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles_shopping.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <h1>PricePursuit</h1>
-    <div class="shopping">
-    <ul>
-        {% for item in items %}
-        <li>
-            {{ item.item_name }} - {{ item.category.name }} - {{ item.quantity }}個 - ¥{{ item.prices }}
-            <form method="post" action="{% url 'delete_shopping_item' item.id %}" style="display:inline;">
+
+    <!-- ナビゲーションバー -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <a class="navbar-brand" href="#">PricePursuit</a>
+        <div class="ml-auto">
+            <a href="{% url 'todo_list' %}" class="btn btn-outline-primary">最初のページに戻る</a>
+        </div>
+    </nav>
+
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">Shopping List</h1>
+
+        <!-- 商品リスト -->
+        <div class="shopping-list">
+            <ul class="list-group">
+                {% for item in items %}
+                <li class="list-group-item d-flex justify-content-between align-items-center">
+                    <div>
+                        <strong>{{ item.item_name }}</strong> - 
+                        <span class="badge badge-info">{{ item.category.name }}</span> - 
+                        {{ item.quantity }}個 - 
+                        <span>¥{{ item.prices }}</span>
+                    </div>
+                    <form method="post" action="{% url 'delete_shopping_item' item.id %}">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-danger btn-sm" onclick="return confirm('まじで削除しますか？');">削除</button>
+                    </form>
+                </li>
+                {% empty %}
+                <li class="list-group-item text-center">商品がありません</li>
+                {% endfor %}
+            </ul>
+        </div>
+
+        <!-- 合計金額セクション -->
+        <div class="price-section mt-5 text-center">
+            <h2>合計: ¥{{ total_price }} 円</h2>
+            <form method="post" action="{% url 'calculate_total_price' %}">
                 {% csrf_token %}
-                <button type="submit" onclick="return confirm('まじで削除しますか？');">削除</button>
+                <button type="submit" class="btn btn-primary mt-3">合計を計算</button>
             </form>
-        </li>
-        {% endfor %}
-    </ul>
+        </div>
+
+        <!-- 商品追加リンク -->
+        <div class="text-center mt-4">
+            <a href="{% url 'shopping_item_add' %}" class="btn btn-success">商品追加</a>
+        </div>
     </div>
-    <div class="price">
-    <h2>合計: {{ total_price }} 円</h2>
-    <form method="post" action="{% url 'calculate_total_price' %}">
-        {% csrf_token %}
-        <button type="submit">合計を計算</button>
-    </form>
-    <a href="{% url 'shopping_item_add' %}">商品追加</a>
-    <a href="{% url 'todo_list' %}">最初のページに戻る</a>
-    </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
