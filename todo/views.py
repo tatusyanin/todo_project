@@ -34,7 +34,9 @@ def login_view(request):
 def todo_list(request):
     categories = Category.objects.all()
     todo_items = TodoItem.objects.all()  # 商品情報を全て取得
-    total_price = sum(todo.price or 0 for todo in todo_items)  # 値段の合計を計算
+    # total_price = sum(todo.price or 0 for todo in todo_items)  # 値段の合計を計算
+    # 合計金額を計算（price × quantity）
+    total_price = sum(item.price * item.quantity for item in todo_items)
     selected_category = request.GET.get('category')  # URLパラメータでカテゴリを取得
     if selected_category:
         # カテゴリが選択されている場合、そのカテゴリの TodoItem をフィルタリング
@@ -107,23 +109,30 @@ def delete_todo_item(request, todo_id):
     return redirect('todo_list')
 
 @login_required
-def edit_todo_item(request, todo_id):#編集
+def edit_todo_item(request, todo_id):
+    # 対象のTodoItemを取得
     todo_item = get_object_or_404(TodoItem, pk=todo_id)
+
     if request.method == 'POST':
         form = ToDoItemForm(request.POST, instance=todo_item)
-        if form.is_valid():
-            form.save()  # 編集された内容を保存
-            if 'add_new' in request.POST:
-                # 新しい ToDo アイテムを追加
-                new_todo_item = form.save(commit=False)  # まだ保存せずにインスタンスを取得
-                new_todo_item.id = None  # 新しい ID を割り当てる
-                new_todo_item.save()  # 新しい ToDo アイテムを保存
-                return redirect('todo_list')  # ToDo リストへリダイレクト
-            return redirect('todo_list')  # 通常の保存後に ToDo リストへリダイレクト
-    else:
-        form = ToDoItemForm(instance=todo_item)
-    return render(request, 'todo/edit_todo_item.html', {'form': form})
 
+        if form.is_valid():
+            if 'add_new' in request.POST:
+                # 新しいTodoItemを作成
+                new_todo_item = form.save(commit=False)  # 保存前にインスタンスを取得
+                new_todo_item.id = None  # 新しいIDを割り当てる
+                new_todo_item.save()  # 新規保存
+                return redirect('todo_list')  # ToDoリストにリダイレクト
+            else:
+                # 既存のTodoItemを更新
+                form.save()
+                return redirect('todo_list')  # ToDoリストにリダイレクト
+    else:
+        # GETリクエスト時にフォームを生成
+        form = ToDoItemForm(instance=todo_item)
+
+    # フォームをテンプレートに渡す
+    return render(request, 'todo/edit_todo_item.html', {'form': form})
 
 def newly_added_item_detail(request, todo_id):
     if request.method == 'POST':
@@ -137,23 +146,28 @@ def newly_added_item_detail(request, todo_id):
     return render(request, 'todo/newly_added_item_detail.html', {'todo_item': todo_item})
 
 @login_required
-def delete_cheapest_items(request):#最安値を表示後削除
+def delete_cheapest_items(request):  # 最安値を表示後削除
     items = TodoItem.objects.all()
     grouped_items = {}
-    
+
     # 商品名ごとにアイテムをグループ化
     for item in items:
-        if item.title not in grouped_items:
-            grouped_items[item.description] = []
-        grouped_items[item.title].append(item)
+        if item.title:  # 商品名が存在する場合のみ
+            if item.title not in grouped_items:
+                grouped_items[item.title] = []
+            grouped_items[item.title].append(item)
+        else:
+            # 商品名がないアイテムがある場合の処理（必要に応じて）
+            print(f"Item without title: {item}")
     
     # 最安値以外のアイテムを削除
     for title, items in grouped_items.items():
-        items.sort(key=lambda x: x.price)  # 価格でソート
+        items.sort(key=lambda x: x.price if x.price is not None else float('inf'))  # Noneを最も高い値として扱う
         for item in items[1:]:  # 最安値のアイテムを除く
             item.delete()
     
     return redirect('todo_list')
+
 
 def logout_view(request):
     if request.method == 'GET':
