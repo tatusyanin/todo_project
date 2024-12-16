@@ -1,0 +1,8 @@
+<!-- delete_cheapest.html -->
+<div class="container mt-5">
+    <h1>DealCleaner - 一番安い商品を残して削除</h1>
+    <form method="post" action="{% url 'delete_cheapest_items' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-danger">DealCleaner</button>
+    </form>
+</div>
