@@ -1,44 +1,53 @@
+/* static/css/styles.css */
+/* 基本スタイル */
 body {
-    background-color: #ff0000;
     font-family: Arial, sans-serif;
+    margin-left: 500px;
+    padding: 20px;
+    background-color: aqua;
 }
 
-h1 {
-    color: #00ff04;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/* iPhone 14 用のスタイル */
+@media only screen and (max-width: 390px) and (max-height: 844px) {
+    body {
+        padding: 10px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .todo-item {
+        padding: 10px;
+        margin: 5px 0;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+    }
+
+    button {
+        width: 100%; /* ボタンを幅いっぱいにする */
+        padding: 15px;
+        font-size: 16px;
+    }
 }
 
-.todo-item {
-    margin: 10px 0;
-    padding: 10px;
-    border: 1px solid #ccc;
-    background-color: #567fbc;
-}
-
-.completed {
-    text-decoration: line-through;
-}
-/* 完了ボタン用のスタイル */
-.complete-btn {
-    background-color: #28a745;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-}
-
-.complete-btn:hover {
-    background-color: #218838;
-}
-
-/* 削除ボタン用のスタイル */
-.delete-btn {
-    background-color: #dc3545;
-    color: white;
-    padding: 5px 10px;
-    border: none;
-    cursor: pointer;
-}
-
-.delete-btn:hover {
-    background-color: #c82333;
-}
