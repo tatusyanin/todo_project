@@ -1,4 +1,6 @@
-#!/Users/jo-jaku/Desktop/2年次/python演習/todo_project/venv/bin/python3
+#!/bin/sh
+'''exec' "/Users/jo-jaku/Library/Mobile Documents/com~apple~CloudDocs/Desktop/2年次/python演習/todo_project/venv/bin/python3.13" "$0" "$@"
+' '''
 # -*- coding: utf-8 -*-
 import re
 import sys

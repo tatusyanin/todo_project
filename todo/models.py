@@ -33,6 +33,7 @@ class TodoItem(models.Model):
     is_shopping = models.BooleanField(default=False)
     source = models.CharField(max_length=50, default='default')
     store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)  # 店舗フィールドを追加
+    quantity = models.IntegerField(default=0)
 
     def __str__(self):
         return self.title

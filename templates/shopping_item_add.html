@@ -1,5 +1,3 @@
-<!-- shopping_item_add.html -->
-
 <!DOCTYPE html>
 <html lang="ja">
 <head>
@@ -8,17 +6,31 @@
     <title>Shopping Todo - 商品追加</title>
     {% load static %}
     <link rel="stylesheet" href="{% static 'css/styles_shopping.css' %}">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
 </head>
 <body>
-    <div class="ado">
-    <h1>商品追加</h1>
-    <form method="post" action="{% url 'shopping_item_add' %}">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">ado</button>
-    </form>
-    <a href="{% url 'shopping_todo' %}">ショッピングリストへ戻る</a>
-    <!-- 商品の一覧を表示するセクション -->
+    <div class="container mt-5">
+        <h1 class="text-center mb-4">商品追加</h1>
+
+        <!-- 商品追加フォーム -->
+        <form method="post" action="{% url 'shopping_item_add' %}" class="p-4 border rounded bg-light">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <div class="text-center">
+                <button type="submit" class="btn btn-success mt-3">追加</button>
+            </div>
+        </form>
+
+        <!-- 戻るリンク -->
+        <div class="text-center mt-4">
+            <a href="{% url 'shopping_todo' %}" class="btn btn-outline-primary">ショッピングリストへ戻る</a>
+        </div>
     </div>
+
+    <!-- Bootstrap JS, Popper.js, and jQuery -->
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 </body>
 </html>
