@@ -33,7 +33,7 @@ class ToDoItemForm(forms.ModelForm):
 
     class Meta:
         model = TodoItem
-        fields = ['description', 'due_date', 'priority', 'price', 'category', 'store', 'is_shopping']
+        fields = ['title', 'due_date', 'priority', 'price', 'category', 'store', 'is_shopping','quantity']
     store = forms.ModelChoiceField(queryset=Store.objects.all(), required=True, empty_label="選択してください")
 
 #買い物用ページ
