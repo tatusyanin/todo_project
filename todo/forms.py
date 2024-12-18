@@ -4,6 +4,7 @@ from .models import TodoItem, Store
 from .models import ShoppingItem
 from .models import ShoppingItem, Category
 from .models import ShoppingItem,Store
+from .models import ShoppingItem, ShoppingCategory
 
 class ToDoItemForm(forms.ModelForm):
     due_date = forms.DateField(
@@ -36,11 +37,18 @@ class ToDoItemForm(forms.ModelForm):
         fields = ['title', 'due_date', 'priority', 'price', 'category', 'store', 'is_shopping','quantity']
     store = forms.ModelChoiceField(queryset=Store.objects.all(), required=True, empty_label="選択してください")
 
-#買い物用ページ
 class ShoppingItemForm(forms.ModelForm):
     class Meta:
         model = ShoppingItem
-        fields = ['item_name','prices','category','quantity']  # 必要に応じてフィールドを追加
+        fields = ['item_name', 'prices', 'category', 'quantity', 'shopping_category']  # 必要に応じてフィールドを追加
         widgets = {
-            'category': forms.Select()
+            'category': forms.Select(),  # 必要に応じてカスタムウィジェット
+            'shopping_category': forms.Select()  # ショッピングカテゴリの選択肢
         }
+
+    shopping_category = forms.ModelChoiceField(
+        queryset=ShoppingCategory.objects.all(),  # ショッピングカテゴリを選択肢にする
+        required=True,
+        empty_label="カテゴリを選択"  # 何も選ばれていない状態のラベル
+    )
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False)  # 必須でないように設定

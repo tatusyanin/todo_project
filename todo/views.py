@@ -10,7 +10,7 @@ from .models import TodoItem
 from django.shortcuts import render
 from .forms import ShoppingItemForm
 from .models import ShoppingItem, Category
-from .models import TodoItem, Store
+from .models import TodoItem, Store,Product
 
 import logging
 
@@ -18,8 +18,9 @@ logger = logging.getLogger(__name__)
 
 @login_required
 def home(request):
-    return render(request, 'home.html')
-
+    categories = Category.objects.all()  # トップページにすべてのカテゴリを表示
+    products = Product.objects.filter(category__in=categories)  # 各カテゴリの商品を取得
+    return render(request, 'home.html', {'categories': categories, 'products': products})
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -203,14 +204,18 @@ def shopping_item_add(request):#買い物用
         if form.is_valid():
             form.save()
             return redirect('shopping_todo')  # リダイレクト先のURLネームを確認
+        else:
+            print(form.errors)  # エラーをコンソールに出力
     else:
         form = ShoppingItemForm()
     return render(request, 'shopping_item_add.html', {'form': form})
 
+from .models import Category,ShoppingCategory
 def shopping_todo(request):
     items = ShoppingItem.objects.all()
+    shopping_categories = ShoppingCategory.objects.all()  # ショッピングカテゴリをすべて取得
     total_price = sum(item.prices * item.quantity for item in items if item.display_on_list)
-    return render(request, 'shopping_todo.html', {'items': items, 'total_price': total_price})
+    return render(request, 'shopping_todo.html', {'items': items, 'total_price': total_price,'shopping_categories': shopping_categories,})
 
 def delete_shopping_item(request, item_id):#削除
     item = get_object_or_404(ShoppingItem, id=item_id)

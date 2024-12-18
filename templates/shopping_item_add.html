@@ -15,13 +15,34 @@
 
         <!-- 商品追加フォーム -->
         <form method="post" action="{% url 'shopping_item_add' %}" class="p-4 border rounded bg-light">
+    
             {% csrf_token %}
-            {{ form.as_p }}
+            
+            <div class="form-group">
+                <label for="{{ form.item_name.id_for_label }}">商品名:</label>
+                {{ form.item_name }}  <!-- 商品名 -->
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.prices.id_for_label }}">値段:</label>
+                {{ form.prices }}  <!-- 価格 -->
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.quantity.id_for_label }}">数量:</label>
+                {{ form.quantity }}  <!-- 数量 -->
+            </div>
+            
+            <div class="form-group">
+                <label for="{{ form.shopping_category.id_for_label }}">カテゴリ:</label>
+                {{ form.shopping_category }}  <!-- ショッピングカテゴリ -->
+            </div>
+            
             <div class="text-center">
                 <button type="submit" class="btn btn-success mt-3">追加</button>
             </div>
         </form>
-
+        
         <!-- 戻るリンク -->
         <div class="text-center mt-4">
             <a href="{% url 'shopping_todo' %}" class="btn btn-outline-primary">ショッピングリストへ戻る</a>
