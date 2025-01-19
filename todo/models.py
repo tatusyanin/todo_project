@@ -52,6 +52,7 @@ class TodoItem(models.Model):
     store = models.ForeignKey(Store, on_delete=models.CASCADE, null=True, blank=True)  # 店舗フィールドを追加
     quantity = models.IntegerField(default=1)  # ここに追加
     shopping_category = models.ForeignKey(ShoppingCategory, on_delete=models.CASCADE, null=True, blank=True)  # ショッピングカテゴリを追加する  # 新規フィールドを追加する  # 新規フィールドを追加する  # 新規フィールドを追加する  # 新規フィールドを追加する  # 新規フィールドを追加する
+    deck_name = models.CharField(max_length=100, blank=True, null=True)  # デッキ名フィールド
 
     def __str__(self):
         return self.title
@@ -66,3 +67,9 @@ class ShoppingItem(models.Model):
 
     def __str__(self):
         return self.item_name
+
+
+class Deck(models.Model):
+    name = models.CharField(max_length=100)
+    def __str__(self):
+        return self.name

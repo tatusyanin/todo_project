@@ -22,4 +22,8 @@ urlpatterns = [
     path('shopping/add/', views.shopping_item_add, name='shopping_item_add'),#追加
     path('item/delete/<int:item_id>/', views.delete_shopping_item, name='delete_shopping_item'),
     path('shopping/calculate_total_price/', calculate_total_price, name='calculate_total_price'),
+    path('create/', views.create_deck, name='create_deck'),
+    path('', views.deck_list, name='deck_list'),  # デッキ一覧ページ
+    path('deal_clear/', views.deal_clear, name='deal_clear'),  # deal_clearのURLパターン
+
     ]

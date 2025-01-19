@@ -1,0 +1,19 @@
+<!-- search_app/templates/search_app/deck_list.html -->
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <title>デッキ一覧</title>
+</head>
+<body>
+    <h1>デッキ一覧</h1>
+    <ul>
+        {% for deck in decks %}
+            <li>{{ deck.name }}</li>
+        {% empty %}
+            <li>デッキはありません。</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'create_deck' %}">新しいデッキを作成</a>
+</body>
+</html>

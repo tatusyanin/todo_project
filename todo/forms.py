@@ -34,7 +34,7 @@ class ToDoItemForm(forms.ModelForm):
 
     class Meta:
         model = TodoItem
-        fields = ['title', 'due_date', 'priority', 'price', 'category', 'store', 'is_shopping','quantity']
+        fields = ['title', 'due_date', 'priority', 'price', 'category', 'store', 'is_shopping','quantity','deck_name']
     store = forms.ModelChoiceField(queryset=Store.objects.all(), required=True, empty_label="選択してください")
 
 class ShoppingItemForm(forms.ModelForm):
@@ -51,4 +51,15 @@ class ShoppingItemForm(forms.ModelForm):
         required=True,
         empty_label="カテゴリを選択"  # 何も選ばれていない状態のラベル
     )
-    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False)  # 必須でないように設定
+    category = forms.ModelChoiceField(queryset=Category.objects.all(), required=False)  # 必須でないように設定   
+
+from .models import Deck
+from django import forms
+
+class DeckForm(forms.Form):
+    class Meta:
+        model = Deck
+        fields = ['name']  # フィールドを指定
+
+class DeckNameForm(forms.Form):
+    deck_name = forms.CharField(label='デッキ名', max_length=100, required=True)

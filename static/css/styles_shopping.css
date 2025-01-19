@@ -1,9 +1,21 @@
 /* 基本スタイル */
 body {
-    font-family: Arial, sans-serif;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
     margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f8f9fa; /* 背景色を少し明るくして全体を見やすく */
+}
+
+.container {
+    max-width: 600px; /* 幅を制限して中央寄せ */
+    width: 100%;
+    box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1); /* 見た目を整える影 */
+    background: white; /* 背景を白に設定 */
     padding: 20px;
-    background-color: aqua;
+    border-radius: 10px; /* 角を丸くする */
 }
 
 h1 {

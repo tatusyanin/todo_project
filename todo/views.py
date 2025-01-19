@@ -15,12 +15,40 @@ from .models import TodoItem, Store,Product
 import logging
 
 logger = logging.getLogger(__name__)
+from .forms import DeckNameForm
 
 @login_required
 def home(request):
-    categories = Category.objects.all()  # トップページにすべてのカテゴリを表示
-    products = Product.objects.filter(category__in=categories)  # 各カテゴリの商品を取得
-    return render(request, 'home.html', {'categories': categories, 'products': products})
+    deck_a_items = []
+    deck_b_items = []
+    deck_name = None
+    lowest_price = None
+    remaining_items = []
+
+    if request.method == 'POST':
+        form = DeckNameForm(request.POST)
+        if form.is_valid():
+            deck_name = form.cleaned_data['deck_name']
+            # 入力されたデッキ名に基づいてアイテムをフィルタリング
+            deck_items = TodoItem.objects.filter(deck_name=deck_name)
+            
+            # 最安値を計算
+            if deck_items:
+                lowest_price = min(item.price for item in deck_items)
+                
+                # 最安値と同じ価格の商品を残す
+                remaining_items = [item for item in deck_items if item.price == lowest_price]
+
+            return render(request, 'home.html', {
+                'form': form,
+                'deck_items': remaining_items,
+                'deck_name': deck_name,
+                'lowest_price': lowest_price
+            })
+    else:
+        form = DeckNameForm()
+
+    return render(request, 'home.html', {'form': form})
 def login_view(request):
     if request.method == 'POST':
         username = request.POST.get('username')
@@ -241,3 +269,38 @@ def calculate_total(request):#合計額計算
         }
         return render(request, 'todo_list.html', context)
     return redirect('todo_list')  # Todoリストページにリダイレクト
+
+from .forms import DeckForm
+from .forms import Deck
+
+def create_deck(request):
+    if request.method == 'POST':
+        form = DeckForm(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect('todo_list')  # デッキ一覧ページへリダイレクト
+    else:
+        form = DeckForm()
+    return render(request, 'search_app/create_deck.html', {'form': form})
+
+def deck_list(request):
+    decks = Deck.objects.all()
+    return render(request, 'search_app/deck_list.html', {'decks': decks})
+from django.db.models import Min
+
+def deal_clear(request):
+    # すべてのアイテムを取得
+    items = todo_list.objects.all()
+    
+    # 最安値の価格を取得
+    min_price = items.aggregate(Min('price'))['price__min']
+    
+    # 最安値の価格を持つアイテムを取得（デッキ名が異なる場合でも同じ最安値を残す）
+    lowest_price_items = items.filter(price=min_price)
+    
+    # 最安値以外のアイテムを削除（最安値アイテムだけを残す）
+    # 最安値のアイテムは削除せず、それ以外のアイテムを削除
+    items.exclude(id__in=lowest_price_items.values('id')).delete()
+
+    # 最安値アイテムとその価格を残す処理はここまでで行われる
+    return redirect('todo_list')  # 適切なリダイレクト先に変更
